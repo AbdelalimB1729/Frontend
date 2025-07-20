@@ -1,0 +1,96 @@
+/* ===== page & header ===== */
+.films-page  { padding: 0 5% 5rem; }
+.films-header{ text-align:center; margin:4rem 0 3rem; }
+.films-header h1{
+  font-size:3rem;
+  background:linear-gradient(45deg,var(--accent),#ff7bac);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* ===== filtres ===== */
+.films-filters{
+  display:flex; flex-wrap:wrap; gap:1rem;
+  justify-content:space-between; align-items:center;
+  margin-bottom:2rem;
+}
+.genre-buttons{ display:flex; flex-wrap:wrap; gap:0.6rem; }
+.genre-buttons button{
+  background:var(--card-bg); color:var(--text-secondary);
+  border:none; padding:0.5rem 1.2rem; border-radius:30px;
+  cursor:pointer; transition:var(--transition);
+}
+.genre-buttons button.active,
+.genre-buttons button:hover{
+  background:var(--accent); color:#fff;
+}
+.search-box{
+  background:var(--secondary); padding:0.4rem 1rem;
+  border-radius:30px; display:flex; align-items:center; gap:0.5rem;
+}
+.search-box input{
+  background:transparent; border:none; color:var(--text); width:160px;
+}
+.search-box input:focus{ outline:none; }
+
+/* ===== grille ===== */
+.films-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:2rem;
+}
+.film-card{
+  background:var(--card-bg); border-radius:15px; overflow:hidden;
+  box-shadow:0 10px 20px rgba(0,0,0,0.2);
+  transition:var(--transition);
+}
+.film-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 15px 30px rgba(0,0,0,0.3);
+}
+.film-card img{ width:100%; height:220px; object-fit:cover; }
+
+/* ===== contenu carte ===== */
+.card-content{ padding:1.4rem; }
+.card-content h3{
+  font-size:1.3rem; margin-bottom:0.4rem;
+  display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;
+}
+.year{ font-weight:400; color:var(--text-secondary); }
+.genre-tag{ color:var(--accent); font-size:0.9rem; margin-bottom:0.8rem; }
+.synopsis{ color:var(--text-secondary); line-height:1.6; }
+.synopsis a{ color:var(--accent); }
+
+/* ===== responsive ===== */
+@media (max-width:768px){
+  .film-card img{ height:180px; }
+}
+.read-next {
+  color: var(--accent);
+}
+
+/* ===== page détails ===== */
+.film-detail-card,
+.blog-detail-card {            /* mutualise look blog/film */
+  background: var(--card-bg);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,.25);
+}
+
+.film-detail-card .detail-hero,
+.blog-detail-card .detail-hero {
+  width: 100%;
+  max-height: 340px;
+  object-fit: cover;
+}
+
+.film-detail-card .detail-content,
+.blog-detail-card .detail-content {
+  padding: 2rem 3rem;
+}
+
+.detail-meta {
+  color: var(--text-secondary);
+  margin-bottom: .8rem;
+}

@@ -1,0 +1,89 @@
+/* Footer.css */
+.footer {
+  background: linear-gradient(180deg, #0d0d0d 0%, #111 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ff2c91, #9d4edd, #4361ee);
+}
+
+.text-light-60 {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.text-light-50 {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.bg-gray-800 {
+  background-color: #1a1a1a;
+}
+
+.border-gray-700 {
+  border-color: #333 !important;
+}
+
+.social-icon {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  background: linear-gradient(145deg, #ff2c91, #9d4edd);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(255, 44, 145, 0.3);
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #ff2c91;
+  transform: translateX(5px);
+}
+
+.border-pink {
+  border-color: #ff2c91 !important;
+}
+
+.btn-pink {
+  background: linear-gradient(145deg, #ff2c91, #e91e77);
+  color: white;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-pink:hover {
+  background: linear-gradient(145deg, #e91e77, #d81b6c);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 44, 145, 0.4);
+}
+
+.bg-pink {
+  background: linear-gradient(145deg, #ff2c91, #e91e77);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer .col-lg-3 {
+    margin-bottom: 2rem;
+  }
+  
+  .footer::before {
+    height: 3px;
+  }
+}

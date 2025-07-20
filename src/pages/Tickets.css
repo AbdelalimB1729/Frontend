@@ -1,0 +1,20 @@
+/* Tickets.css - Advanced Black & Pink Neon Admin Style */
+
+.tickets-admin-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a13 0%, #181824 100%);
+  padding: 40px 0;
+  box-shadow: 0 0 80px 0 #ff4f8b33 inset;
+}
+
+.tickets-admin-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #ff4f8b;
+  text-shadow: 0 2px 24px #ff4f8b99, 0 1px 0 #fff1;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+@import './FilmsA.css'; 

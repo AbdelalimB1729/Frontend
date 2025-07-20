@@ -1,0 +1,259 @@
+.chat-page {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 15px;
+    background: #11111a;
+    color: #fff;
+}
+
+.chat-container {
+    border: 1px solid #2a2a3a;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #181824;
+    box-shadow: 0 8px 32px rgba(231, 84, 128, 0.10);
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #181824 0%, #e75480 100%);
+    color: #fff;
+    padding: 1rem 2rem;
+    position: relative;
+}
+
+.chat-header h4 {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #ff4f8b;
+}
+
+.cei-chat-logo {
+    height: 45px;
+    margin-right: 15px;
+    filter: drop-shadow(0 2px 4px rgba(231, 84, 128, 0.2));
+}
+
+.chat-messages {
+    height: 500px;
+    overflow-y: auto;
+    padding: 1.5rem;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.message {
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: messageAppear 0.4s ease forwards;
+}
+
+@keyframes messageAppear {
+    from {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+}
+
+.message-bubble {
+    max-width: 85%;
+    padding: 1rem 1.25rem;
+    border-radius: 1.25rem;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(231, 84, 128, 0.05);
+}
+
+.user-message .message-bubble {
+    background: linear-gradient(135deg, #181824 0%, #e75480 100%);
+    color: #fff;
+    border-radius: 1.25rem 1.25rem 4px 1.25rem;
+    margin-left: auto;
+    border: 1px solid #e75480;
+}
+
+.assistant-message .message-bubble {
+    background: #232336;
+    border-left: 5px solid #ff4f8b;
+    border-radius: 1.25rem 1.25rem 1.25rem 4px;
+    color: #fff;
+}
+
+.message-meta {
+    font-size: 0.75rem;
+    color: #ffb3c9;
+    margin-top: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.typing-indicator {
+    display: inline-flex;
+    padding: 1rem 1.25rem;
+    gap: 0.5rem;
+    background: #232336;
+    border-radius: 1.25rem;
+    border-left: 5px solid #ff4f8b;
+}
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    background: #e75480;
+    border-radius: 50%;
+    animation: typing 1.4s infinite;
+}
+
+@keyframes typing {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+}
+
+.chat-form {
+    padding: 1.5rem;
+    background: #181824;
+    border-top: 1px solid #2a2a3a;
+}
+
+.input-group {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.form-control {
+    flex: 1;
+    border: 1px solid #2a2a3a;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    background: #232336;
+    color: #fff;
+    box-shadow: inset 0 1px 2px rgba(231, 84, 128, 0.05);
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    border-color: #e75480;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(231, 84, 128, 0.15);
+}
+
+.send-btn {
+    background-color: #e75480;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 2px 4px rgba(231, 84, 128, 0.10);
+}
+
+.send-btn:hover:not(:disabled) {
+    background-color: #ff4f8b;
+    transform: translateY(-2px);
+}
+
+.send-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.send-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.chat-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    color: #ffb3c9;
+}
+
+.btn-back-home {
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    background: #181824;
+    border: 1px solid #e75480;
+    color: #e75480;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(231, 84, 128, 0.15);
+}
+
+.btn-back-home:hover {
+    background: linear-gradient(135deg, #e75480 0%, #181824 100%);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 84, 128, 0.25);
+}
+
+@media (max-width: 768px) {
+    .chat-page {
+      margin: 0;
+      padding: 0;
+      max-width: 100%;
+      background: #11111a;
+    }
+    
+    .chat-container {
+      margin: 0;
+      border-radius: 0;
+      height: 100vh;
+      max-width: 100%;
+      background: #181824;
+    }
+
+    .chat-messages {
+      height: calc(100vh - 160px);
+    }
+    
+    .chat-header {
+      padding: 1rem;
+    }
+    
+    .message-bubble {
+      max-width: 90%;
+    }
+    
+    .input-group {
+      gap: 0.5rem;
+    }
+    
+    .send-btn {
+      padding: 0.75rem;
+    }
+    
+    .chat-footer {
+      padding: 0 15px;
+      margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .chat-header h4 {
+      font-size: 1.1rem;
+    }
+    
+    .chat-header p {
+      font-size: 0.75rem;
+    }
+    
+    .cei-chat-logo {
+      height: 35px;
+    }
+    
+    .btn-back-home {
+      width: 100%;
+      padding: 0.75rem;
+    }
+}
