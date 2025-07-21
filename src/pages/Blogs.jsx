@@ -4,23 +4,27 @@ import { Link } from 'react-router-dom';
 import './Blogs.css';
 import AvgStars from '../components/AvgStars';
 
-const API_BASE = process.env.REACT_APP_API_BASE_URL ;
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
 
 export default function Blogs() {
-  const [articles,  setArticles]   = useState([]);
-  const [filtered,  setFiltered]   = useState([]);
-  const [categories,setCategories] = useState([]);
-  const [loading,   setLoading]    = useState(true);
-  const [error,     setError]      = useState(null);
+  const [articles, setArticles] = useState([]);
+  const [filtered, setFiltered] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // filtres
-  const [query, setQuery]       = useState('');
-  const [activeCat,setActiveCat]   = useState('all');
+  const [query, setQuery] = useState('');
+  const [activeCat, setActiveCat] = useState('all');
 
   // modal création
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ title:'', content:'', category:'', image:null });
-  const [preview,  setPreview]  = useState(null);
+  const [formData, setFormData] = useState({ 
+    title: '', 
+    content: '', 
+    category: '', 
+    image: ''  // Changé pour une chaîne URL
+  });
 
   /* -------- fetch articles -------- */
   useEffect(() => {
@@ -66,13 +70,14 @@ export default function Blogs() {
     if (!token) return alert('Connecte-toi pour publier');
     
     try {
-      const data = new FormData();
-      Object.entries(formData).forEach(([k, v]) => v && data.append(k, v));
-
+      // Envoi des données en JSON
       const res = await fetch(`${API_BASE}/api/blog`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: data
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}` 
+        },
+        body: JSON.stringify(formData)
       });
       
       if (!res.ok) throw new Error('Échec de la création');
@@ -81,8 +86,7 @@ export default function Blogs() {
       setArticles([art, ...articles]); 
       handleFilter(activeCat);
       setShowForm(false); 
-      setPreview(null);
-      setFormData({ title: '', content: '', category: '', image: null });
+      setFormData({ title: '', content: '', category: '', image: '' });
     } catch (err) {
       console.error('Erreur création:', err);
       alert(err.message);
@@ -179,15 +183,12 @@ export default function Blogs() {
               onChange={e => setFormData({...formData, category: e.target.value})} 
             />
             <input 
-              type="file" 
-              accept="image/*" 
-              onChange={e => {
-                const f = e.target.files[0]; 
-                setFormData({...formData, image: f}); 
-                setPreview(f ? URL.createObjectURL(f) : null);
-              }} 
+              type="text" 
+              placeholder="URL de l'image (optionnel)" 
+              value={formData.image}
+              onChange={e => setFormData({...formData, image: e.target.value})} 
             />
-            {preview && <img className="img-preview" src={preview} alt="preview" />}
+            {formData.image && <img className="img-preview" src={formData.image} alt="preview" />}
             <div className="form-actions">
               <button type="button" onClick={() => setShowForm(false)}>
                 Annuler
