@@ -1,9 +1,7 @@
 import './Home.css';
 import { Link } from 'react-router-dom';
-
+import Footer from '../components/Footer';
 const Home = () => {
-  const isFilmsBlocked = true; // change to false to activer le bouton
-
   const movies = [
     {
       id: 1,
@@ -70,23 +68,12 @@ const Home = () => {
           <h1>Votre univers cinématographique complet</h1>
           <p>Découvrez, réservez et partagez votre passion du cinéma. Explorez les derniers films, lisez les critiques des blogueurs et réservez vos places en quelques clics.</p>
           <div className="hero-buttons">
-            <Link
-              to={isFilmsBlocked ? "#" : "/films"}
-              className={`cta-button ${isFilmsBlocked ? "disabled" : ""}`}
-              onClick={(e) => {
-                if (isFilmsBlocked) {
-                  e.preventDefault();
-                  alert("Accès aux films bloqué pour le moment.");
-                }
-              }}
-            >
-              Voir les films
-            </Link>
+            <Link to="/films" className="cta-button">Voir les films</Link>
             <Link to="/blogs" className="cta-button secondary">Lire les blogs</Link>
           </div>
         </div>
         <div className="hero-bg">
-          <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Cinéma" />
+          <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Cinéma" />
         </div>
       </section>
 
