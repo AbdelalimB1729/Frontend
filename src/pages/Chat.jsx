@@ -14,7 +14,7 @@ const Chat = () => {
     }
   ]);
   const [isTyping, setIsTyping] = useState(false);
-  const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null); // Changé de messagesEndRef à messagesContainerRef
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -25,8 +25,11 @@ const Chat = () => {
     scrollToBottom();
   }, [messages]);
 
+  // Fonction modifiée pour utiliser le scrollTop
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -93,7 +96,8 @@ const Chat = () => {
           </div>
         </div>
 
-        <div className="chat-messages">
+        {/* Ajout de la référence sur le conteneur des messages */}
+        <div className="chat-messages" ref={messagesContainerRef}>
           {messages.map((msg, index) => (
             <div 
               key={index} 
@@ -120,8 +124,6 @@ const Chat = () => {
               </div>
             </div>
           )}
-          
-          <div ref={messagesEndRef} />
         </div>
 
         <form className="chat-form" onSubmit={handleSubmit}>
