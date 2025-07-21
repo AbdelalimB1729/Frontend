@@ -59,7 +59,7 @@ const Chat = () => {
     } catch (error) {
       const errorMessage = {
         role: 'assistant',
-        content: 'Désolé, service temporairement indisponible. Contactez-nous au (514) 905-1551',
+        content: 'Désolé, service temporairement indisponible. Contactez-nous',
         timestamp: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
       };
       
