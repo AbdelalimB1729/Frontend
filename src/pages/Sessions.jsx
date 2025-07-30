@@ -41,17 +41,19 @@ const Sessions = () => {
     setCurrentSession({
       film: '',
       cinema: '',
-      screen: '',
-      date: '',
-      time: '',
-      seatsAvailable: 0,
+      date: new Date().toISOString().split('T')[0], // Date du jour par défaut
+      time: '18:00', // Heure par défaut
+      seats: [], // Initialiser avec un tableau vide
     });
     setIsEditing(false);
     setOpenForm(true);
   };
 
   const handleEdit = (session) => {
-    setCurrentSession(session);
+    setCurrentSession({
+      ...session,
+      date: session.date ? new Date(session.date).toISOString().split('T')[0] : '',
+    });
     setIsEditing(true);
     setOpenForm(true);
   };
@@ -67,10 +69,21 @@ const Sessions = () => {
 
   const handleSubmit = async () => {
     try {
+      // Convertir la date en objet Date complet avec l'heure
+      const dateTime = new Date(currentSession.date);
+      const [hours, minutes] = currentSession.time.split(':');
+      dateTime.setHours(parseInt(hours, 10));
+      dateTime.setMinutes(parseInt(minutes, 10));
+      
+      const sessionData = {
+        ...currentSession,
+        date: dateTime,
+      };
+
       if (isEditing) {
-        await adminApi.updateSession(currentSession._id, currentSession);
+        await adminApi.updateSession(currentSession._id, sessionData);
       } else {
-        await adminApi.createSession(currentSession);
+        await adminApi.createSession(sessionData);
       }
       fetchData();
       setOpenForm(false);
@@ -84,18 +97,35 @@ const Sessions = () => {
       id: 'film', 
       label: 'Film', 
       minWidth: 150, 
-      format: (value) => value?.title || 'N/A'  // Null-safe access
+      format: (value) => value?.title || 'N/A'
     },
     { 
       id: 'cinema', 
       label: 'Cinéma', 
       minWidth: 150, 
-      format: (value) => value?.name || 'N/A'  // Null-safe access
+      format: (value) => value?.name || 'N/A'
     },
-    { id: 'screen', label: 'Salle', minWidth: 100 },
-    { id: 'date', label: 'Date', minWidth: 120 },
-    { id: 'time', label: 'Heure', minWidth: 100 },
-    { id: 'seatsAvailable', label: 'Places disponibles', minWidth: 120 },
+    { 
+      id: 'date', 
+      label: 'Date et Heure', 
+      minWidth: 180,
+      format: (value) => {
+        if (!value) return 'N/A';
+        const date = new Date(value);
+        return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+      }
+    },
+    { 
+      id: 'seats', 
+      label: 'Places réservées', 
+      minWidth: 150,
+      format: (seats) => {
+        if (!seats) return '0/0';
+        const total = seats.length;
+        const reserved = seats.filter(seat => seat.isReserved).length;
+        return `${reserved}/${total}`;
+      }
+    },
   ];
 
   const formFields = [
@@ -111,10 +141,24 @@ const Sessions = () => {
       type: 'select',
       options: cinemas.map(cinema => ({ value: cinema._id, label: cinema.name }))
     },
-    { name: 'screen', label: 'Salle' },
-    { name: 'date', label: 'Date', type: 'date' },
-    { name: 'time', label: 'Heure', type: 'time' },
-    { name: 'seatsAvailable', label: 'Places disponibles', type: 'number' },
+    { 
+      name: 'date', 
+      label: 'Date', 
+      type: 'date',
+      // Convertir pour l'input date (YYYY-MM-DD)
+      getValue: (session) => session.date ? new Date(session.date).toISOString().split('T')[0] : ''
+    },
+    { 
+      name: 'time', 
+      label: 'Heure', 
+      type: 'time',
+      // Formater l'heure (HH:MM)
+      getValue: (session) => {
+        if (!session.date) return '18:00';
+        const date = new Date(session.date);
+        return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+      }
+    },
   ];
 
   return (
@@ -136,7 +180,6 @@ const Sessions = () => {
         />
       </Box>
       
-      {/* Render EntityForm only if openForm is true and currentSession is valid */}
       {openForm && currentSession && (
         <Box className="advanced-form">
           <EntityForm
