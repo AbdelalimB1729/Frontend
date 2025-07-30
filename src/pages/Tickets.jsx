@@ -26,23 +26,50 @@ const Tickets = () => {
   };
 
   const columns = [
-    { id: 'code', label: 'Code', minWidth: 100 },
+    { 
+      id: '_id', 
+      label: 'ID', 
+      minWidth: 100,
+      format: (value) => value.substring(0, 6) // Affiche les 6 premiers caractères de l'ID
+    },
     { 
       id: 'session', 
       label: 'Séance', 
       minWidth: 200, 
-      format: (value) => 
-        value ? `${value.film?.title || 'Film inconnu'} - ${value.date}` : 'N/A'  // Null-safe access
+      format: (value) => {
+        if (!value) return 'N/A';
+        const date = new Date(value.date);
+        return `${value.film?.title || 'Film inconnu'} - ${date.toLocaleDateString()}`;
+      }
     },
     { 
       id: 'user', 
       label: 'Utilisateur', 
       minWidth: 150, 
-      format: (value) => value?.name || 'N/A'  // Null-safe access
+      format: (value) => value?.name || 'N/A'
     },
-    { id: 'price', label: 'Prix (€)', minWidth: 100 },
-    { id: 'status', label: 'Statut', minWidth: 100 },
-    { id: 'createdAt', label: 'Date d\'achat', minWidth: 150 },
+    { 
+      id: 'seatNumber', 
+      label: 'Siège', 
+      minWidth: 100 
+    },
+    { 
+      id: 'paid', 
+      label: 'Statut', 
+      minWidth: 100,
+      format: (value) => value ? 'Payé' : 'Non payé'
+    },
+    { 
+      id: 'paymentMethod', 
+      label: 'Méthode de paiement', 
+      minWidth: 120 
+    },
+    { 
+      id: 'createdAt', 
+      label: 'Date d\'achat', 
+      minWidth: 150,
+      format: (value) => new Date(value).toLocaleDateString()
+    },
   ];
 
   return (
