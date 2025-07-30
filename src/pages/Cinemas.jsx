@@ -33,7 +33,7 @@ const Cinemas = () => {
     setCurrentCinema({
       name: '',
       location: '',
-      screens: 0,
+      numberOfSeats: 0, // Changed from screens
     });
     setIsEditing(false);
     setOpenForm(true);
@@ -68,17 +68,18 @@ const Cinemas = () => {
     }
   };
 
+  // Updated columns to match model
   const columns = [
     { id: 'name', label: 'Nom', minWidth: 150 },
     { id: 'location', label: 'Emplacement', minWidth: 200 },
-    { id: 'screens', label: 'Salles', minWidth: 100 },
-    { id: 'createdAt', label: 'Date de création', minWidth: 150 },
+    { id: 'numberOfSeats', label: 'Nombre de sièges', minWidth: 100 }, // Corrected field name
   ];
 
+  // Updated form fields to match model
   const formFields = [
     { name: 'name', label: 'Nom du cinéma' },
     { name: 'location', label: 'Emplacement' },
-    { name: 'screens', label: 'Nombre de salles', type: 'number' },
+    { name: 'numberOfSeats', label: 'Nombre de sièges', type: 'number' }, // Corrected field name
   ];
 
   return (
@@ -100,7 +101,6 @@ const Cinemas = () => {
         />
       </div>
       
-      {/* Render EntityForm only if openForm is true and currentCinema is valid */}
       {openForm && currentCinema && (
         <div className="advanced-form">
           <EntityForm
