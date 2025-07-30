@@ -1,6 +1,6 @@
 // src/pages/FilmsA.jsx
 import React, { useState, useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Alert } from '@mui/material';
 import DataTable from '../components/DataTable';
 import EntityForm from '../components/EntityForm';
 import { adminApi } from '../services/api';
@@ -12,6 +12,7 @@ const FilmsA = () => {
   const [openForm, setOpenForm] = useState(false);
   const [currentFilm, setCurrentFilm] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchFilms();
@@ -20,10 +21,12 @@ const FilmsA = () => {
   const fetchFilms = async () => {
     try {
       setIsLoading(true);
+      setError(null);
       const response = await adminApi.getFilms();
       setFilms(response.data);
     } catch (error) {
       console.error('Error fetching films:', error);
+      setError('Échec du chargement des films');
     } finally {
       setIsLoading(false);
     }
@@ -33,7 +36,7 @@ const FilmsA = () => {
     setCurrentFilm({
       title: '',
       director: '',
-      duration: 0,
+      duration: 90,  // Valeur par défaut plus logique
       genre: [],
       year: new Date().getFullYear(),
       description: '',
@@ -41,31 +44,45 @@ const FilmsA = () => {
     });
     setIsEditing(false);
     setOpenForm(true);
+    setError(null);
   };
 
   const handleEdit = (film) => {
-    setCurrentFilm(film);
+    setCurrentFilm({
+      ...film,
+      // S'assurer que genre est toujours un tableau
+      genre: Array.isArray(film.genre) ? film.genre : [film.genre]
+    });
     setIsEditing(true);
     setOpenForm(true);
+    setError(null);
   };
 
   const handleDelete = async (id) => {
     try {
+      setError(null);
       await adminApi.deleteFilm(id);
       fetchFilms();
     } catch (error) {
       console.error('Error deleting film:', error);
+      setError('Échec de la suppression du film');
     }
   };
 
   const handleSubmit = async () => {
     try {
-      // Convertir les genres en tableau si nécessaire
+      setError(null);
+      
+      // Normalisation des données
       const filmData = {
         ...currentFilm,
+        // Garantir que genre est un tableau
         genre: Array.isArray(currentFilm.genre) 
           ? currentFilm.genre 
-          : [currentFilm.genre]
+          : [currentFilm.genre].filter(Boolean),
+        // Conversion en nombres
+        year: Number(currentFilm.year),
+        duration: Number(currentFilm.duration)
       };
 
       if (isEditing) {
@@ -73,10 +90,12 @@ const FilmsA = () => {
       } else {
         await adminApi.createFilm(filmData);
       }
+      
       fetchFilms();
       setOpenForm(false);
     } catch (error) {
       console.error('Error saving film:', error);
+      setError(error.response?.data?.message || 'Erreur lors de la sauvegarde');
     }
   };
 
@@ -94,10 +113,34 @@ const FilmsA = () => {
   ];
 
   const formFields = [
-    { name: 'title', label: 'Titre', required: true },
-    { name: 'director', label: 'Réalisateur' },
-    { name: 'duration', label: 'Durée (minutes)', type: 'number' },
-    { name: 'year', label: 'Année de sortie', type: 'number' },
+    { 
+      name: 'title', 
+      label: 'Titre', 
+      required: true,
+      fullWidth: true
+    },
+    { 
+      name: 'director', 
+      label: 'Réalisateur',
+      fullWidth: true
+    },
+    { 
+      name: 'duration', 
+      label: 'Durée (minutes)', 
+      type: 'number',
+      inputProps: { min: 1, step: 1 },
+      fullWidth: true
+    },
+    { 
+      name: 'year', 
+      label: 'Année de sortie', 
+      type: 'number',
+      inputProps: { 
+        min: 1900, 
+        max: new Date().getFullYear() 
+      },
+      fullWidth: true
+    },
     { 
       name: 'genre', 
       label: 'Genre',
@@ -113,10 +156,21 @@ const FilmsA = () => {
         { value: 'romance', label: 'Romance' },
         { value: 'thriller', label: 'Thriller' },
         { value: 'animation', label: 'Animation' },
-      ]
+      ],
+      fullWidth: true
     },
-    { name: 'description', label: 'Description', multiline: true, rows: 4 },
-    { name: 'poster', label: 'URL de l\'affiche' },
+    { 
+      name: 'description', 
+      label: 'Description', 
+      multiline: true, 
+      rows: 4,
+      fullWidth: true
+    },
+    { 
+      name: 'poster', 
+      label: 'URL de l\'affiche',
+      fullWidth: true
+    },
   ];
 
   return (
@@ -124,6 +178,12 @@ const FilmsA = () => {
       <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
         Gestion des Films
       </Typography>
+      
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
       
       <DataTable
         data={films}
@@ -142,7 +202,7 @@ const FilmsA = () => {
           entity={currentFilm}
           setEntity={setCurrentFilm}
           fields={formFields}
-          title="Film"
+          title={isEditing ? "Modifier le Film" : "Créer un Nouveau Film"}
           onSubmit={handleSubmit}
           isEditing={isEditing}
         />
