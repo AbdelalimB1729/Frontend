@@ -1,9 +1,7 @@
-// src/pages/Ratings.jsx
 import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import DataTable from '../components/DataTable';
 import { adminApi } from '../services/api';
-import './Ratings.css';
 
 const Ratings = () => {
   const [ratings, setRatings] = useState([]);
@@ -36,55 +34,35 @@ const Ratings = () => {
 
   const columns = [
     { 
-      id: 'resource',
-      label: 'Élément noté', 
-      minWidth: 200, 
-      format: (_, row) => {
-        if (row.film) {
-          return `Film: ${row.film?.title || 'Film '}`;
-        } else if (row.article) {
-          return `Article: ${row.article?.title || 'Article '}`;
-        }
-        return 'N/A';
-      }
+      id: 'film', 
+      label: 'Film', 
+      minWidth: 150, 
+      format: (value) => value?.title || 'N/A'  // Null-safe access
     },
     { 
       id: 'user', 
       label: 'Utilisateur', 
       minWidth: 150, 
-      format: (value) => value?.name || 'N/A'
+      format: (value) => value?.name || 'N/A'  // Null-safe access
     },
-    { 
-      id: 'stars', 
-      label: 'Note', 
-      minWidth: 100,
-      format: (value) => `${value}/5`
-    },
+    { id: 'stars', label: 'Note', minWidth: 100 },
     { id: 'comment', label: 'Commentaire', minWidth: 200 },
-    { 
-      id: 'createdAt', 
-      label: 'Date', 
-      minWidth: 150,
-      format: (value) => new Date(value).toLocaleDateString()
-    },
+    { id: 'createdAt', label: 'Date', minWidth: 150 },
   ];
 
   return (
-    <Box className="ratings-admin-page">
-      <Typography variant="h4" gutterBottom sx={{ mb: 3 }} className="ratings-admin-title">
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
         Gestion des Notes
       </Typography>
       
-      <div className="advanced-card">
-        <DataTable
-          data={ratings}
-          columns={columns}
-          onDelete={handleDelete}
-          isLoading={isLoading}
-          title="Liste des Notes"
-          className="advanced-table"
-        />
-      </div>
+      <DataTable
+        data={ratings}
+        columns={columns}
+        onDelete={handleDelete}
+        isLoading={isLoading}
+        title="Liste des Notes"
+      />
     </Box>
   );
 };
