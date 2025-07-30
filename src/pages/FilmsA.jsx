@@ -1,4 +1,4 @@
-// src/pages/Films.jsx
+// src/pages/FilmsA.jsx
 import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import DataTable from '../components/DataTable';
@@ -34,8 +34,10 @@ const FilmsA = () => {
       title: '',
       director: '',
       duration: 0,
-      genre: '',
-      synopsis: '',
+      genre: [],
+      year: new Date().getFullYear(),
+      description: '',
+      poster: ''
     });
     setIsEditing(false);
     setOpenForm(true);
@@ -58,10 +60,18 @@ const FilmsA = () => {
 
   const handleSubmit = async () => {
     try {
+      // Convertir les genres en tableau si nécessaire
+      const filmData = {
+        ...currentFilm,
+        genre: Array.isArray(currentFilm.genre) 
+          ? currentFilm.genre 
+          : [currentFilm.genre]
+      };
+
       if (isEditing) {
-        await adminApi.updateFilm(currentFilm._id, currentFilm);
+        await adminApi.updateFilm(currentFilm._id, filmData);
       } else {
-        await adminApi.createFilm(currentFilm);
+        await adminApi.createFilm(filmData);
       }
       fetchFilms();
       setOpenForm(false);
@@ -74,27 +84,39 @@ const FilmsA = () => {
     { id: 'title', label: 'Titre', minWidth: 150 },
     { id: 'director', label: 'Réalisateur', minWidth: 150 },
     { id: 'duration', label: 'Durée (min)', minWidth: 100 },
-    { id: 'genre', label: 'Genre', minWidth: 100 },
-    { id: 'releaseDate', label: 'Date de sortie', minWidth: 120 },
+    { 
+      id: 'genre', 
+      label: 'Genre', 
+      minWidth: 150,
+      format: (value) => Array.isArray(value) ? value.join(', ') : value
+    },
+    { id: 'year', label: 'Année', minWidth: 100 },
   ];
 
   const formFields = [
-    { name: 'title', label: 'Titre' },
+    { name: 'title', label: 'Titre', required: true },
     { name: 'director', label: 'Réalisateur' },
     { name: 'duration', label: 'Durée (minutes)', type: 'number' },
+    { name: 'year', label: 'Année de sortie', type: 'number' },
     { 
       name: 'genre', 
       label: 'Genre',
       type: 'select',
+      multiple: true,
       options: [
         { value: 'action', label: 'Action' },
         { value: 'drama', label: 'Drame' },
         { value: 'comedy', label: 'Comédie' },
         { value: 'horror', label: 'Horreur' },
         { value: 'sci-fi', label: 'Science-Fiction' },
+        { value: 'fantasy', label: 'Fantasy' },
+        { value: 'romance', label: 'Romance' },
+        { value: 'thriller', label: 'Thriller' },
+        { value: 'animation', label: 'Animation' },
       ]
     },
-    { name: 'synopsis', label: 'Synopsis', multiline: true, rows: 4 },
+    { name: 'description', label: 'Description', multiline: true, rows: 4 },
+    { name: 'poster', label: 'URL de l\'affiche' },
   ];
 
   return (
@@ -113,7 +135,6 @@ const FilmsA = () => {
         title="Liste des Films"
       />
       
-      {/* Render EntityForm only if openForm is true and currentFilm is valid */}
       {openForm && currentFilm && (
         <EntityForm
           open={openForm}
